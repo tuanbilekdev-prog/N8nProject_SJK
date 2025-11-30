@@ -9,6 +9,8 @@ services:
       POSTGRES_USER: n8n
       POSTGRES_PASSWORD: n8n_password
       POSTGRES_DB: n8n
+      N8N_EDITOR_BASE_URL: "https://unemigrating-visionally-jeffery.ngrok-free.dev"
+      WEBHOOK_URL: "https://unemigrating-visionally-jeffery.ngrok-free.dev/webhook/webhook-rag"
     volumes:
       - n8n_postgres_data:/var/lib/postgresql/data
 

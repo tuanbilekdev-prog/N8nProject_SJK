@@ -1,0 +1,119 @@
+{
+  "name": "Chatbot Project",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "72e45e89-bdb2-4a3b-b922-7733ed3f92c6",
+      "name": "Telegram Trigger",
+      "webhookId": "3871d71c-074e-4ed2-acd0-e693063b3ac4",
+      "credentials": {
+        "telegramApi": {
+          "id": "oCZK2lPZTb2JtBx9",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=  {{$node[\"Telegram Trigger\"].json[\"message\"][\"text\"]}}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3035a6f7-93bf-4bf0-9b82-228c8f1e2cf4",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "NCbPpNp7cBA3PVpJ",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{$node[\"Telegram Trigger\"].json[\"message\"][\"chat\"][\"id\"]}}",
+        "text": "={{$node[\"Message a model\"].json[\"output\"][0][\"content\"][0][\"text\"]}}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        560,
+        0
+      ],
+      "id": "6d0b51b7-0111-4bf5-b971-38d80849e6a4",
+      "name": "Send a text message",
+      "webhookId": "4250b353-f8ca-42bd-bc8b-ee9d9da1bf1f",
+      "credentials": {
+        "telegramApi": {
+          "id": "oCZK2lPZTb2JtBx9",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "28b777b3-2621-4ccf-88b1-387d10609882",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "fae9bbd851ee8c12c4af13230d262b475919e13088ef01a727b3f3764ab1c02a"
+  },
+  "id": "L0o9nTw3agowsCZB",
+  "tags": []
+}
