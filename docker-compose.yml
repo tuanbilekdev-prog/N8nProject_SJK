@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: n8n_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: n8n_password
+      POSTGRES_DB: n8n
+    volumes:
+      - n8n_postgres_data:/var/lib/postgresql/data
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      # --- Database (Postgres) ---
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: n8n
+      DB_POSTGRESDB_USER: n8n
+      DB_POSTGRESDB_PASSWORD: n8n_password
+
+      # --- Basic server config ---
+      N8N_HOST: 0.0.0.0
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+
+      # Ganti ini dengan URL ngrok kamu (setelah ngrok jalan)
+      # Contoh: https://ab12cd34ef.ngrok-free.app
+      N8N_EDITOR_BASE_URL: "https://unemigrating-visionally-jeffery.ngrok-free.dev"
+      WEBHOOK_URL: "https://unemigrating-visionally-jeffery.ngrok-free.dev"
+
+      # Zona waktu (opsional)
+      GENERIC_TIMEZONE: "Asia/Jakarta"
+
+    depends_on:
+      - postgres
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_postgres_data:
+  n8n_data:
