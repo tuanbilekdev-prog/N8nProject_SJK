@@ -1,0 +1,106 @@
+{
+  "name": "Workflow Progresss 3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook-rag",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "22b6bf09-2549-4e86-93fa-13712f0c9da6",
+      "name": "Webhook",
+      "webhookId": "f52af0d7-bdab-4b80-8fab-d815382c8a5a"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "={{$json.body.question}}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "312cdf81-6776-46a6-b564-6b41744afc72",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "2uvqmAcIYmjuOE7e",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{\n  $node['Message a model'].json && $node['Message a model'].json.output && $node['Message a model'].json.output[0] && $node['Message a model'].json.output[0].content && $node['Message a model'].json.output[0].content[0] && $node['Message a model'].json.output[0].content[0].text\n    ? {\n        \"answer\": $node['Message a model'].json.output[0].content[0].text\n      }\n    : {\n        \"answer\": \"Maaf, terjadi kesalahan saat memproses pertanyaan Anda.\",\n        \"error\": true\n      }\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        560,
+        0
+      ],
+      "id": "45f942e5-e580-4d6d-a1fb-880d69293ea7",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fc6debeb-40d4-4271-83c3-47fb09ee70c8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2f6bb680a55db80494bf730c60c2c52cd9449c47989424d01d77d0c5ae933531"
+  },
+  "id": "gzAPejUpEN5lD2Ti",
+  "tags": []
+}
