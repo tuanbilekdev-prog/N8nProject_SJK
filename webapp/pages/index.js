@@ -85,8 +85,8 @@ export default function Home() {
         <div style={styles.chatWrapper}>
           <header style={styles.header}>
             <div>
-              <h1 style={styles.title}>RAG WebApp</h1>
-              <p style={styles.subtitle}>Progress 3 - WebApp → n8n → OpenAI</p>
+              <h1 style={styles.title}>Dev AI</h1>
+              <p style={styles.subtitle}>Smart help, fast solution</p>
             </div>
             <span style={styles.status}>Terhubung</span>
           </header>
